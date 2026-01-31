@@ -3,26 +3,1295 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RecipeJS - Your Functional Cooking Companion</title>
-    <!-- TODO: Link your CSS file here -->
-     <link rel="stylesheet" href="style.css">
+    <title>SilentSOS - Your Silent Guardian</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .status-bar {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #4ade80;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .card-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .emergency-btn {
+            width: 100%;
+            padding: 20px;
+            font-size: 1.5em;
+            font-weight: bold;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+
+        .sos-btn {
+            background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+            color: white;
+            box-shadow: 0 5px 20px rgba(255, 65, 108, 0.4);
+        }
+
+        .sos-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 30px rgba(255, 65, 108, 0.6);
+        }
+
+        .sos-btn.active {
+            animation: emergency-pulse 1s infinite;
+        }
+
+        @keyframes emergency-pulse {
+            0%, 100% { 
+                background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+                transform: scale(1);
+            }
+            50% { 
+                background: linear-gradient(135deg, #ff0000 0%, #cc0000 100%);
+                transform: scale(1.02);
+            }
+        }
+
+        .safe-btn {
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            color: white;
+        }
+
+        .feature-btn {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .feature-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .feature-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .info-box {
+            background: #f8fafc;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .info-box strong {
+            color: #667eea;
+        }
+
+        .location-display {
+            background: #f1f5f9;
+            padding: 12px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        .contact-list {
+            list-style: none;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            background: #f8fafc;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .contact-item .name {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .contact-item .phone {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .fake-call-screen {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: white;
+            padding: 60px 30px;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .caller-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: #475569;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+        }
+
+        .caller-name {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .call-status {
+            color: #94a3b8;
+            margin-bottom: 40px;
+        }
+
+        .call-actions {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .call-btn {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .call-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .accept-btn {
+            background: #22c55e;
+            color: white;
+        }
+
+        .decline-btn {
+            background: #ef4444;
+            color: white;
+        }
+
+        .route-tracker {
+            background: #f1f5f9;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+
+        .route-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .route-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #667eea;
+            color: white;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .safe-spot-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .safe-spot-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .safe-spot-item:hover {
+            background: #e2e8f0;
+            transform: translateX(5px);
+        }
+
+        .spot-icon {
+            font-size: 24px;
+        }
+
+        .spot-info {
+            flex: 1;
+        }
+
+        .spot-name {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 3px;
+        }
+
+        .spot-distance {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .cpr-finder {
+            background: #fef2f2;
+            border-left: 4px solid #ef4444;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .cpr-responder {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border: 2px solid #fee2e2;
+        }
+
+        .responder-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #ef4444;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .responder-info {
+            flex: 1;
+        }
+
+        .responder-name {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .responder-distance {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .responder-eta {
+            background: #ef4444;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+
+        .log-container {
+            max-height: 200px;
+            overflow-y: auto;
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 0.85em;
+        }
+
+        .log-entry {
+            padding: 5px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .log-time {
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .alert-badge {
+            background: #fef2f2;
+            color: #dc2626;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .safe-badge {
+            background: #f0fdf4;
+            color: #16a34a;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #475569;
+            font-weight: 600;
+        }
+
+        .input-group input, 
+        .input-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .recording-indicator {
+            display: none;
+            align-items: center;
+            gap: 10px;
+            background: #fee2e2;
+            padding: 12px;
+            border-radius: 8px;
+            color: #dc2626;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .recording-indicator.active {
+            display: flex;
+        }
+
+        .recording-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #dc2626;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .photo-burst-display {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .photo-placeholder {
+            aspect-ratio: 1;
+            background: #f1f5f9;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            color: #cbd5e1;
+        }
+
+        .photo-placeholder.captured {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <h1>🍳 RecipeJS</h1>
-        <p>Your functional cooking companion</p>
-    </header>
-    <main>
-        <div id="recipe-container">
-            <!-- Recipe cards will be injected here -->
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🛡️ SilentSOS</h1>
+            <p>Your Silent Guardian - Always Watching, Always Ready</p>
         </div>
-    </main>
-    <!-- TODO: Add header section -->
-    
-    <!-- TODO: Add main section -->
-    
-    <!-- TODO: Link your JavaScript file here -->
-     <script src="app.js"></script>
 
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <div class="status-indicator">
+                <div class="status-dot"></div>
+                <span id="statusText">All Systems Active • Monitoring Your Safety</span>
+            </div>
+            <div class="location-display" id="locationDisplay">
+                📍 Location: Fetching GPS coordinates...
+            </div>
+        </div>
+
+        <!-- Main Grid -->
+        <div class="main-grid">
+            <!-- Emergency SOS Card -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">🚨</div>
+                    <div class="card-title">Emergency SOS</div>
+                </div>
+                
+                <button class="emergency-btn sos-btn" id="sosBtn" onclick="triggerSOS()">
+                    🆘 ACTIVATE EMERGENCY SOS
+                </button>
+                
+                <button class="emergency-btn safe-btn" id="safeBtn" onclick="confirmSafe()" style="display:none;">
+                    ✅ I'M SAFE - CANCEL ALERT
+                </button>
+
+                <div class="recording-indicator" id="recordingIndicator">
+                    <div class="recording-dot"></div>
+                    Recording Evidence (Video + Audio)
+                </div>
+
+                <div class="info-box">
+                    <strong>Emergency Contacts:</strong>
+                    <ul class="contact-list" id="contactList">
+                        <li class="contact-item">
+                            <div>
+                                <div class="name">👨‍👩‍👧 Parents</div>
+                                <div class="phone">+91 98765 43210</div>
+                            </div>
+                        </li>
+                        <li class="contact-item">
+                            <div>
+                                <div class="name">👮 Police</div>
+                                <div class="phone">100</div>
+                            </div>
+                        </li>
+                        <li class="contact-item">
+                            <div>
+                                <div class="name">👥 Best Friend</div>
+                                <div class="phone">+91 87654 32109</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="log-container" id="eventLog">
+                    <div class="log-entry">
+                        <span class="log-time">[00:00:00]</span> System initialized
+                    </div>
+                </div>
+            </div>
+
+            <!-- Prevention Features Card -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">🛡️</div>
+                    <div class="card-title">Prevention Features</div>
+                </div>
+
+                <button class="feature-btn" onclick="startFakeCall()">
+                    📞 Start Fake Boyfriend Call
+                </button>
+
+                <button class="feature-btn" onclick="toggleRouteTracking()">
+                    🚗 Enable Route Tracking
+                </button>
+
+                <button class="feature-btn" onclick="showSafeSpots()">
+                    🏪 Show Quick Escape Routes
+                </button>
+
+                <button class="feature-btn" onclick="startPhotoBurst()">
+                    📸 Start Photo Burst Mode
+                </button>
+
+                <div class="info-box">
+                    <strong>🤖 AI Protection Active:</strong><br>
+                    ✓ Voice trigger detection<br>
+                    ✓ Shake pattern monitoring<br>
+                    ✓ Fall detection enabled<br>
+                    ✓ Location learning in progress
+                </div>
+            </div>
+
+            <!-- Route Tracking Card -->
+            <div class="card" id="routeCard" style="display:none;">
+                <div class="card-header">
+                    <div class="card-icon">🚗</div>
+                    <div class="card-title">Route Tracking</div>
+                </div>
+
+                <div class="route-tracker">
+                    <div class="route-status">
+                        <div class="route-icon">📍</div>
+                        <div>
+                            <div style="font-weight:bold;">Monitoring Ride-Share Route</div>
+                            <div style="font-size:0.9em;color:#666;">Expected arrival: 15 mins</div>
+                        </div>
+                    </div>
+                    
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="routeProgress"></div>
+                    </div>
+
+                    <div id="routeStatus" style="margin-top:15px;">
+                        <div class="safe-badge">✓ Route is safe - On expected path</div>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Expected Destination:</label>
+                    <input type="text" id="destination" placeholder="Enter destination address">
+                </div>
+
+                <button class="feature-btn" onclick="updateRoute()">
+                    Update Destination
+                </button>
+            </div>
+
+            <!-- Safe Spots Card -->
+            <div class="card" id="safeSpotsCard" style="display:none;">
+                <div class="card-header">
+                    <div class="card-icon">🏪</div>
+                    <div class="card-title">Nearby Safe Spots</div>
+                </div>
+
+                <div class="safe-spot-list">
+                    <div class="safe-spot-item" onclick="navigateToSpot('Police Station')">
+                        <div class="spot-icon">🚔</div>
+                        <div class="spot-info">
+                            <div class="spot-name">Police Station - Central</div>
+                            <div class="spot-distance">800m away • 3 min safe walk</div>
+                        </div>
+                        <div style="color:#22c55e;">→</div>
+                    </div>
+
+                    <div class="safe-spot-item" onclick="navigateToSpot('Hospital')">
+                        <div class="spot-icon">🏥</div>
+                        <div class="spot-info">
+                            <div class="spot-name">City Hospital ER</div>
+                            <div class="spot-distance">1.2km away • 5 min safe walk</div>
+                        </div>
+                        <div style="color:#22c55e;">→</div>
+                    </div>
+
+                    <div class="safe-spot-item" onclick="navigateToSpot('Cafe')">
+                        <div class="spot-icon">☕</div>
+                        <div class="spot-info">
+                            <div class="spot-name">Starbucks (24/7)</div>
+                            <div class="spot-distance">200m away • 1 min safe walk</div>
+                        </div>
+                        <div style="color:#22c55e;">→</div>
+                    </div>
+
+                    <div class="safe-spot-item" onclick="navigateToSpot('Gas Station')">
+                        <div class="spot-icon">⛽</div>
+                        <div class="spot-info">
+                            <div class="spot-name">Shell Gas Station</div>
+                            <div class="spot-distance">350m away • 2 min safe walk</div>
+                        </div>
+                        <div style="color:#22c55e;">→</div>
+                    </div>
+
+                    <div class="safe-spot-item" onclick="navigateToSpot('Mall')">
+                        <div class="spot-icon">🏬</div>
+                        <div class="spot-info">
+                            <div class="spot-name">Phoenix Mall (Security)</div>
+                            <div class="spot-distance">650m away • 3 min safe walk</div>
+                        </div>
+                        <div style="color:#22c55e;">→</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CPR Finder Card -->
+            <div class="card" id="cprCard" style="display:none;">
+                <div class="card-header">
+                    <div class="card-icon">❤️</div>
+                    <div class="card-title">CPR Responders Nearby</div>
+                </div>
+
+                <div class="cpr-finder">
+                    <div class="alert-badge">🚨 Heart Emergency Detected</div>
+                    <p style="margin-bottom:15px;">Alerting CPR-certified responders in your area...</p>
+
+                    <div class="cpr-responder">
+                        <div class="responder-avatar">RK</div>
+                        <div class="responder-info">
+                            <div class="responder-name">Rajesh Kumar (Certified)</div>
+                            <div class="responder-distance">📍 450m away (North)</div>
+                        </div>
+                        <div class="responder-eta">2 min</div>
+                    </div>
+
+                    <div class="cpr-responder">
+                        <div class="responder-avatar">PS</div>
+                        <div class="responder-info">
+                            <div class="responder-name">Priya Sharma (Certified)</div>
+                            <div class="responder-distance">📍 680m away (East)</div>
+                        </div>
+                        <div class="responder-eta">3 min</div>
+                    </div>
+
+                    <div class="cpr-responder">
+                        <div class="responder-avatar">AM</div>
+                        <div class="responder-info">
+                            <div class="responder-name">Amit Mehta (Paramedic)</div>
+                            <div class="responder-distance">📍 920m away (West)</div>
+                        </div>
+                        <div class="responder-eta">4 min</div>
+                    </div>
+
+                    <div class="info-box" style="margin-top:15px;">
+                        <strong>✅ Actions Taken:</strong><br>
+                        • Ambulance dispatched (ETA: 8 mins)<br>
+                        • Emergency contacts notified<br>
+                        • AED locations shared<br>
+                        • Live location broadcasting
+                    </div>
+                </div>
+            </div>
+
+            <!-- Photo Burst Card -->
+            <div class="card" id="photoBurstCard" style="display:none;">
+                <div class="card-header">
+                    <div class="card-icon">📸</div>
+                    <div class="card-title">Evidence Collection</div>
+                </div>
+
+                <div class="recording-indicator active">
+                    <div class="recording-dot"></div>
+                    Photo Burst Active - Capturing every 2 seconds
+                </div>
+
+                <div class="info-box">
+                    <strong>📊 Capture Status:</strong><br>
+                    Photos captured: <span id="photoCount">0</span><br>
+                    Cloud backup: Active ☁️<br>
+                    Timestamp: Enabled ⏰
+                </div>
+
+                <div class="photo-burst-display">
+                    <div class="photo-placeholder" id="photo1">📷</div>
+                    <div class="photo-placeholder" id="photo2">📷</div>
+                    <div class="photo-placeholder" id="photo3">📷</div>
+                    <div class="photo-placeholder" id="photo4">📷</div>
+                    <div class="photo-placeholder" id="photo5">📷</div>
+                    <div class="photo-placeholder" id="photo6">📷</div>
+                </div>
+
+                <button class="feature-btn" onclick="stopPhotoBurst()" style="margin-top:15px;">
+                    Stop Photo Burst
+                </button>
+            </div>
+
+            <!-- Voice Transcript Card -->
+            <div class="card" id="transcriptCard" style="display:none;">
+                <div class="card-header">
+                    <div class="card-icon">🎤</div>
+                    <div class="card-title">Voice Transcript</div>
+                </div>
+
+                <div class="recording-indicator active">
+                    <div class="recording-dot"></div>
+                    Recording and transcribing audio...
+                </div>
+
+                <div class="log-container" id="transcriptLog">
+                    <div class="log-entry">
+                        <span class="log-time">[00:00:05]</span> "Help me please"
+                    </div>
+                    <div class="log-entry">
+                        <span class="log-time">[00:00:12]</span> "Someone is following me"
+                    </div>
+                    <div class="log-entry">
+                        <span class="log-time">[00:00:18]</span> "I'm near the park entrance"
+                    </div>
+                </div>
+
+                <div class="info-box" style="margin-top:15px;">
+                    <strong>🔒 Legal Evidence Package:</strong><br>
+                    ✓ Timestamped transcript<br>
+                    ✓ Audio recording backup<br>
+                    ✓ GPS coordinates logged<br>
+                    ✓ Ready for authorities
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fake Call Modal -->
+    <div class="modal" id="fakeCallModal">
+        <div class="modal-content">
+            <div class="fake-call-screen">
+                <div class="caller-avatar">❤️</div>
+                <div class="caller-name" id="callerName">Ryan (Boyfriend)</div>
+                <div class="call-status">Incoming call...</div>
+
+                <div class="call-actions">
+                    <button class="call-btn accept-btn" onclick="answerFakeCall()">📞</button>
+                    <button class="call-btn decline-btn" onclick="declineFakeCall()">📵</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Safety Check Modal -->
+    <div class="modal" id="safetyCheckModal">
+        <div class="modal-content">
+            <h2 style="margin-bottom:20px;">👋 Safety Check</h2>
+            <p style="margin-bottom:30px; color:#666; font-size:1.1em;">
+                Are you still safe? Please confirm within 30 seconds.
+            </p>
+            <button class="emergency-btn safe-btn" onclick="confirmSafetyCheck(true)">
+                ✅ Yes, I'm Safe
+            </button>
+            <button class="emergency-btn sos-btn" onclick="confirmSafetyCheck(false)">
+                🆘 No, I Need Help
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Global state
+        let emergencyActive = false;
+        let fakeCallActive = false;
+        let routeTrackingActive = false;
+        let photoBurstActive = false;
+        let photoCount = 0;
+        let photoBurstInterval = null;
+        let routeProgressInterval = null;
+
+        // Initialize location
+        function updateLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const lat = position.coords.latitude.toFixed(6);
+                        const lon = position.coords.longitude.toFixed(6);
+                        document.getElementById('locationDisplay').innerHTML = 
+                            `📍 Location: ${lat}, ${lon} • <a href="https://www.google.com/maps?q=${lat},${lon}" target="_blank" style="color:#667eea;">View on Map</a>`;
+                    },
+                    (error) => {
+                        document.getElementById('locationDisplay').textContent = 
+                            '📍 Location: GPS unavailable (Demo Mode: 17.3850° N, 78.4867° E)';
+                    }
+                );
+            }
+        }
+
+        // Log events
+        function logEvent(message) {
+            const log = document.getElementById('eventLog');
+            const time = new Date().toLocaleTimeString();
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.innerHTML = `<span class="log-time">[${time}]</span> ${message}`;
+            log.insertBefore(entry, log.firstChild);
+        }
+
+        // Trigger SOS
+        function triggerSOS() {
+            if (emergencyActive) return;
+            
+            emergencyActive = true;
+            document.getElementById('sosBtn').classList.add('active');
+            document.getElementById('sosBtn').textContent = '🚨 EMERGENCY ACTIVE - HELP ON THE WAY';
+            document.getElementById('safeBtn').style.display = 'block';
+            document.getElementById('recordingIndicator').classList.add('active');
+            document.getElementById('statusText').textContent = '🚨 EMERGENCY MODE ACTIVE';
+
+            logEvent('🚨 EMERGENCY SOS TRIGGERED');
+            logEvent('📱 Sending alerts to all emergency contacts...');
+            logEvent('📍 Sharing live location...');
+            logEvent('📹 Started video recording');
+            logEvent('🎤 Started audio recording');
+            
+            // Simulate notifications
+            setTimeout(() => {
+                logEvent('✅ Parents notified via SMS & Call');
+            }, 1000);
+            
+            setTimeout(() => {
+                logEvent('✅ Police alerted (100)');
+            }, 1500);
+            
+            setTimeout(() => {
+                logEvent('✅ Best friend notified');
+            }, 2000);
+
+            setTimeout(() => {
+                logEvent('☁️ Evidence uploading to secure cloud...');
+            }, 2500);
+
+            // Show transcript card
+            document.getElementById('transcriptCard').style.display = 'block';
+            simulateTranscript();
+
+            // Show photo burst
+            document.getElementById('photoBurstCard').style.display = 'block';
+            startPhotoBurst();
+
+            // Alert sound (if enabled)
+            alert('🚨 EMERGENCY SOS ACTIVATED!\n\nAlerts sent to:\n• Parents\n• Police (100)\n• Emergency contacts\n\nLive location sharing active.\nRecording evidence...');
+        }
+
+        // Confirm safe
+        function confirmSafe() {
+            if (!emergencyActive) return;
+
+            const confirmed = confirm('Are you sure you want to cancel the emergency alert?\n\nThis will stop all alerts and recording.');
+            
+            if (confirmed) {
+                emergencyActive = false;
+                document.getElementById('sosBtn').classList.remove('active');
+                document.getElementById('sosBtn').textContent = '🆘 ACTIVATE EMERGENCY SOS';
+                document.getElementById('safeBtn').style.display = 'none';
+                document.getElementById('recordingIndicator').classList.remove('active');
+                document.getElementById('statusText').textContent = 'All Systems Active • Monitoring Your Safety';
+
+                logEvent('✅ User confirmed safe - Emergency cancelled');
+                logEvent('📧 "I\'m safe" notifications sent to all contacts');
+                logEvent('💾 Evidence saved for record');
+
+                stopPhotoBurst();
+            }
+        }
+
+        // Fake call
+        function startFakeCall() {
+            document.getElementById('fakeCallModal').classList.add('active');
+            logEvent('📞 Fake call initiated - "Ryan (Boyfriend)" calling');
+            fakeCallActive = true;
+
+            // Auto safety check in 30 seconds
+            setTimeout(() => {
+                if (fakeCallActive) {
+                    showSafetyCheck();
+                }
+            }, 30000);
+        }
+
+        function answerFakeCall() {
+            logEvent('📞 Fake call answered');
+            logEvent('🎤 Simulating conversation...');
+            
+            alert('📞 FAKE CALL ACTIVE\n\n"Hey babe! Where are you?"\n"I\'m tracking your location."\n"Call me when you get home safe."\n\nThis conversation is being simulated to deter potential threats.');
+            
+            document.getElementById('fakeCallModal').classList.remove('active');
+            
+            // Show safety check after call
+            setTimeout(() => {
+                showSafetyCheck();
+            }, 5000);
+        }
+
+        function declineFakeCall() {
+            logEvent('📞 Fake call declined');
+            document.getElementById('fakeCallModal').classList.remove('active');
+            fakeCallActive = false;
+        }
+
+        function showSafetyCheck() {
+            document.getElementById('safetyCheckModal').classList.add('active');
+            logEvent('⏰ Safety check initiated');
+
+            // Auto-trigger SOS if not responded in 30 seconds
+            setTimeout(() => {
+                if (document.getElementById('safetyCheckModal').classList.contains('active')) {
+                    logEvent('⚠️ No response to safety check - Auto-triggering SOS');
+                    document.getElementById('safetyCheckModal').classList.remove('active');
+                    triggerSOS();
+                }
+            }, 30000);
+        }
+
+        function confirmSafetyCheck(isSafe) {
+            document.getElementById('safetyCheckModal').classList.remove('active');
+            fakeCallActive = false;
+
+            if (isSafe) {
+                logEvent('✅ User confirmed safe via safety check');
+            } else {
+                logEvent('🚨 User indicated danger - Triggering SOS');
+                triggerSOS();
+            }
+        }
+
+        // Route tracking
+        function toggleRouteTracking() {
+            routeTrackingActive = !routeTrackingActive;
+            
+            if (routeTrackingActive) {
+                document.getElementById('routeCard').style.display = 'block';
+                logEvent('🚗 Route tracking enabled');
+                simulateRouteProgress();
+            } else {
+                document.getElementById('routeCard').style.display = 'none';
+                logEvent('🚗 Route tracking disabled');
+                if (routeProgressInterval) {
+                    clearInterval(routeProgressInterval);
+                }
+            }
+        }
+
+        function simulateRouteProgress() {
+            let progress = 0;
+            const progressBar = document.getElementById('routeProgress');
+            const statusDiv = document.getElementById('routeStatus');
+
+            routeProgressInterval = setInterval(() => {
+                progress += 5;
+                progressBar.style.width = progress + '%';
+
+                if (progress === 30) {
+                    // Simulate deviation
+                    statusDiv.innerHTML = '<div class="alert-badge">⚠️ Route deviation detected! Driver took different path</div>';
+                    logEvent('⚠️ Route deviation detected - Alerting emergency contacts');
+                } else if (progress === 50) {
+                    statusDiv.innerHTML = '<div class="safe-badge">✓ Route back on track - Driver explained detour</div>';
+                    logEvent('✅ Route normalized - Continuing monitoring');
+                }
+
+                if (progress >= 100) {
+                    clearInterval(routeProgressInterval);
+                    statusDiv.innerHTML = '<div class="safe-badge">✓ Destination reached safely!</div>';
+                    logEvent('🎯 Destination reached - Route tracking complete');
+                }
+            }, 1000);
+        }
+
+        function updateRoute() {
+            const destination = document.getElementById('destination').value;
+            if (destination) {
+                logEvent(`🎯 Route updated to: ${destination}`);
+                alert(`Route tracking updated!\n\nNew destination: ${destination}\n\nEmergency contacts will be alerted if route deviates.`);
+            }
+        }
+
+        // Safe spots
+        function showSafeSpots() {
+            const card = document.getElementById('safeSpotsCard');
+            card.style.display = card.style.display === 'none' ? 'block' : 'none';
+            logEvent('🏪 Displaying nearby safe spots');
+        }
+
+        function navigateToSpot(spotName) {
+            logEvent(`🧭 Navigation started to: ${spotName}`);
+            alert(`🧭 SAFE ROUTE NAVIGATION\n\nDestination: ${spotName}\n\n✅ Well-lit route selected\n✅ Avoiding dark areas\n✅ Emergency contacts notified\n✅ ETA shared with contacts\n\nFollow the highlighted path on your map.`);
+        }
+
+        // Photo burst
+        function startPhotoBurst() {
+            if (photoBurstActive) return;
+
+            photoBurstActive = true;
+            photoCount = 0;
+            document.getElementById('photoBurstCard').style.display = 'block';
+
+            photoBurstInterval = setInterval(() => {
+                photoCount++;
+                document.getElementById('photoCount').textContent = photoCount;
+
+                // Simulate photo capture
+                const photoIndex = ((photoCount - 1) % 6) + 1;
+                const photoEl = document.getElementById('photo' + photoIndex);
+                photoEl.classList.add('captured');
+                photoEl.textContent = '✓';
+
+                logEvent(`📸 Photo #${photoCount} captured and uploaded`);
+
+                // Reset after 6 photos
+                if (photoCount % 6 === 0) {
+                    setTimeout(() => {
+                        for (let i = 1; i <= 6; i++) {
+                            const el = document.getElementById('photo' + i);
+                            el.classList.remove('captured');
+                            el.textContent = '📷';
+                        }
+                    }, 2000);
+                }
+            }, 2000);
+        }
+
+        function stopPhotoBurst() {
+            photoBurstActive = false;
+            if (photoBurstInterval) {
+                clearInterval(photoBurstInterval);
+            }
+            logEvent(`📸 Photo burst stopped - ${photoCount} photos saved`);
+            
+            if (!emergencyActive) {
+                document.getElementById('photoBurstCard').style.display = 'none';
+            }
+        }
+
+        // Simulate transcript
+        function simulateTranscript() {
+            const transcripts = [
+                "I need help",
+                "Someone is following me",
+                "I'm scared",
+                "Please help me",
+                "I'm at the park entrance"
+            ];
+
+            let index = 0;
+            const interval = setInterval(() => {
+                if (index < transcripts.length && emergencyActive) {
+                    const log = document.getElementById('transcriptLog');
+                    const time = new Date().toLocaleTimeString();
+                    const entry = document.createElement('div');
+                    entry.className = 'log-entry';
+                    entry.innerHTML = `<span class="log-time">[${time}]</span> "${transcripts[index]}"`;
+                    log.appendChild(entry);
+                    index++;
+                } else {
+                    clearInterval(interval);
+                }
+            }, 3000);
+        }
+
+        // Simulate CPR finder (demo)
+        function showCPRFinder() {
+            document.getElementById('cprCard').style.display = 'block';
+            logEvent('❤️ Heart emergency detected - Finding CPR responders');
+        }
+
+        // Voice activation simulation
+        document.addEventListener('keydown', (e) => {
+            // Press 'H' key to simulate "help me" voice trigger
+            if (e.key === 'h' || e.key === 'H') {
+                logEvent('🎤 Voice trigger detected: "help me"');
+                setTimeout(() => {
+                    if (!emergencyActive) {
+                        triggerSOS();
+                    }
+                }, 500);
+            }
+
+            // Press 'S' to simulate shake detection
+            if (e.key === 's' || e.key === 'S') {
+                logEvent('📱 Shake pattern detected');
+                setTimeout(() => {
+                    if (!emergencyActive) {
+                        triggerSOS();
+                    }
+                }, 500);
+            }
+
+            // Press 'F' to simulate fall detection
+            if (e.key === 'f' || e.key === 'F') {
+                logEvent('⚠️ Sudden fall detected');
+                setTimeout(() => {
+                    if (!emergencyActive) {
+                        triggerSOS();
+                    }
+                }, 500);
+            }
+
+            // Press 'C' to show CPR finder
+            if (e.key === 'c' || e.key === 'C') {
+                showCPRFinder();
+            }
+        });
+
+        // Initialize on load
+        window.onload = function() {
+            updateLocation();
+            logEvent('System initialized successfully');
+            logEvent('All sensors active and monitoring');
+            
+            // Show welcome message
+            setTimeout(() => {
+                alert('🛡️ SilentSOS Active!\n\nKEYBOARD SHORTCUTS (for demo):\n• Press H - Voice trigger ("help me")\n• Press S - Shake detection\n• Press F - Fall detection\n• Press C - CPR emergency\n\nYour safety is our priority! 💙');
+            }, 1000);
+
+            // Update location every 30 seconds
+            setInterval(updateLocation, 30000);
+        };
+    </script>
 </body>
 </html>
